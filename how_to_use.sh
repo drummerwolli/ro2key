@@ -4,7 +4,7 @@
 #sudo apt-get install jq python3
 #sudo pip3 install awscli
 
-TEST_ROLE=Some_EC2_DefaultRole
+TEST_ROLE=S3BucketReadOnly
 APP_URL=http://localhost:8080
 OAUTH2_URL=https://auth.example.org/oauth2
 
@@ -31,3 +31,8 @@ export AWS_ACCESS_KEY_ID=$(echo $key | jq .AccessKeyId -r)
 export AWS_SECRET_ACCESS_KEY=$(echo $key | jq .SecretAccessKey -r)
 export AWS_SESSION_TOKEN=$(echo $key | jq .SessionToken -r)
 export AWS_DEFAULT_REGION="eu-west-1"
+
+###
+# now you can use awscli to test your temporary access credential, such as:
+# $ aws s3 ls s3://some_bucket/
+###
