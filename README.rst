@@ -63,7 +63,7 @@ Now you can get a ``Temporary Security Credentials`` for the IAM role ``S3MintRe
 
 .. code-block:: bash
 
-    $ curl --insecure --request GET --header "Authorization: Bearer YOUR_OAUTH2_TOKEN" https://app_id.teamid.example.org/get_key/S3MintReadOnly
+    $ curl --insecure --request GET --header "Authorization: Bearer YOUR_OAUTH2_TOKEN" https://ro2key.teamid.example.org/get_key/S3MintReadOnly
 
 The file ``how_to_use.sh`` gives you an example how to use the credentials from S3 Mint Bucket or from `Berry`_ to get the temporary access keys with HTTP calls.
 
