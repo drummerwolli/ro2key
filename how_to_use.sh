@@ -30,7 +30,7 @@ key=$(curl --insecure --request GET --header "Authorization: Bearer $access_toke
 export AWS_ACCESS_KEY_ID=$(echo $key | jq .AccessKeyId -r)
 export AWS_SECRET_ACCESS_KEY=$(echo $key | jq .SecretAccessKey -r)
 export AWS_SESSION_TOKEN=$(echo $key | jq .SessionToken -r)
-export AWS_DEFAULT_REGION="eu-west-1"
+export AWS_DEFAULT_REGION="eu-west-1" # change to your target region
 
 ###
 # now you can use awscli to test your temporary access credential, such as:
