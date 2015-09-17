@@ -1,5 +1,6 @@
 #!/bin/bash
 
+### Make sure you installed following tools
 #sudo apt-get install jq python3
 #sudo pip3 install awscli
 

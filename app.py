@@ -31,7 +31,7 @@ def get_key(role_name):
 
 logging.basicConfig(level=logging.INFO)
 api_args = {'auth_url': os.environ.get('AUTH_URL'), 'tokeninfo_url': os.environ.get('TOKENINFO_URL')}
-app = connexion.App(__name__, port=8081, debug=True, server='gevent')
+app = connexion.App(__name__, port=8080, debug=True, server='gevent')
 app.add_api('swagger.yaml', arguments=api_args)
 application = app.app
 
