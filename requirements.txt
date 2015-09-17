@@ -1,0 +1,4 @@
+boto3
+connexion>=0.9.4
+gevent>=1.1b1
+uwsgi

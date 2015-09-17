@@ -1,0 +1,123 @@
+SenzaInfo:
+  StackName: ro2key
+  Parameters:
+    - DockerImage:
+        Description: "Docker image path with version tag of ro2key."
+    - ApplicationID:
+        Description: "The Application Id which got registered for ro2key in Yourturn/Kio."
+    - MintBucket:
+        Description: "Mint Bucket of ro2key."
+    - ScalyrAccountKey:
+        Description: "Scalyr Account Key, necessary for Logging."
+    - RolesArnPrefix:
+        Description: "The prefix of IAM roles."
+    - TargetRole:
+        Description: "The target role that will be used by Temporary Credentials."
+    - AuthURL:
+        Description: "OAuth2 service URL"
+    - TokenInfoURL:
+        Description: "TokenInfo service URL"
+    - HostedZone:
+        Description: "Hosted Zone in which Stups deploys"
+    - SSLCertificateId:
+        Description: "ARN of your SSL Certificate which will be used for ELB"
+
+SenzaComponents:
+  - Configuration:
+      Type: Senza::StupsAutoConfiguration
+  - AppServer:
+      Type: Senza::TaupageAutoScalingGroup
+      AutoScaling:
+        Minimum: 1
+        Maximum: 1
+        MetricType: CPU
+      HealthCheckType: ELB
+      ElasticLoadBalancer: AppLoadBalancer
+      LoadBalancerNames:
+        - Ref: AppLoadBalancer
+      InstanceType: t2.medium
+      SecurityGroups:
+        - "Fn::GetAtt" : [ "Ro2KeySecGroup" , "GroupId" ]
+      IamRoles:
+        - "{{Arguments.TargetRole}}"
+      TaupageConfig:
+        application_id: "{{Arguments.ApplicationID}}"
+        runtime: Docker
+        source: "{{Arguments.DockerImage}}"
+        ports:
+          8080: 8080
+        mint_bucket: '{{Arguments.MintBucket}}'
+        scalyr_account_key: '{{Arguments.ScalyrAccountKey}}'
+        environment:
+          ARN_PREFIX: "{{Arguments.RolesArnPrefix}}"
+          AUTH_URL: "{{Arguments.AuthURL}}"
+          TOKENINFO_URL: "{{Arguments.TokenInfoURL}}"
+          SCALYR_ACCOUNT_KEY: '{{Arguments.ScalyrAccountKey}}'
+
+Resources:
+  Ro2KeySecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Ro2Key Appliance Security Group"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: "0.0.0.0/0"
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: "0.0.0.0/0"
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: "0.0.0.0/0"
+  Route53WeightedDomainRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: "{{Arguments.HostedZone}}"
+      Name: "{{SenzaInfo.StackName}}.{{Arguments.HostedZone}}"
+      SetIdentifier: "{{SenzaInfo.StackName}}-{{Arguments.version}}"
+      Type: CNAME
+      TTL: 20
+      Weight: 0
+      ResourceRecords:
+        - Fn::GetAtt:
+           - AppLoadBalancer
+           - DNSName
+  Route53VesionedDomainRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: "{{Arguments.HostedZone}}"
+      Name: "{{SenzaInfo.StackName}}-{{Arguments.version}}.{{Arguments.HostedZone}}"
+      Type: CNAME
+      TTL: 20
+      ResourceRecords:
+        - Fn::GetAtt:
+           - AppLoadBalancer
+           - DNSName
+  AppLoadBalancer:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      LoadBalancerName: "{{SenzaInfo.StackName}}-{{Arguments.version}}"
+      CrossZone: true
+      HealthCheck:
+        Target: TCP:8080
+        Timeout: 5
+        Interval: 30
+        UnhealthyThreshold: 2
+        HealthyThreshold: 3
+      Listeners:
+        - InstancePort: 8080
+          LoadBalancerPort: 443
+          Protocol: HTTPS
+          InstanceProtocol: HTTP
+          SSLCertificateId: "{{Arguments.SSLCertificateId}}"
+      SecurityGroups:
+        - "Fn::GetAtt" : [ "Ro2KeySecGroup" , "GroupId" ]
+      Scheme: internet-facing
+      Subnets:
+        Fn::FindInMap:
+          - LoadBalancerSubnets
+          - Ref: AWS::Region
+          - Subnets

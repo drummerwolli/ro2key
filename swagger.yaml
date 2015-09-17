@@ -1,0 +1,38 @@
+swagger: '2.0'
+info:
+  title: IAM Role-based rotatable key generator
+  version: "0.1"
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /get_key/{role_name}:
+    get:
+      summary: Get key by IAM Role
+      security:
+        - oauth2: [uid]
+      operationId: app.get_key
+      parameters:
+        - role_name:
+          name: role_name
+          description: Name of IAM role to assume
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Return key
+        403:
+          description: Access Denied
+        404:
+          description: Role not found
+
+securityDefinitions:
+  oauth2:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: "{{ auth_url if auth_url }}"
+    x-tokenInfoUrl: "{{ tokeninfo_url if tokeninfo_url }}"
+    scopes:
+      uid: Unique identifier of the user accessing the service.
