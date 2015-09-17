@@ -52,7 +52,6 @@ SenzaComponents:
           ARN_PREFIX: "{{Arguments.RolesArnPrefix}}"
           AUTH_URL: "{{Arguments.AuthURL}}"
           TOKENINFO_URL: "{{Arguments.TokenInfoURL}}"
-          SCALYR_ACCOUNT_KEY: '{{Arguments.ScalyrAccountKey}}'
 
 Resources:
   Ro2KeySecGroup:
