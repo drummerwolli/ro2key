@@ -6,8 +6,6 @@ Ro2Key: Role-based rotatable key (role to key) is a REST service to generate AWS
 
 ``Ro2Key`` is designed to enable the access of AWS resources from ``robot users`` in a secure way under `STUPS`_ framework, it generates a ``Temporary Security Credentials`` by HTTPS call when the caller provides a valid OAuth2 token, and send send the credentials back as a JSON string.
 
-Connexion is a framework on top of Flask_ to automagically handle your REST API requests based on `Swagger 2.0 Specification`_ files in YAML.
-
 
 When should I use it
 ====================
@@ -90,9 +88,6 @@ Now you can get a ``Temporary Security Credentials`` for the IAM role ``S3MintRe
 The file ``how_to_use.sh`` gives you an example how to use the credentials from S3 Mint Bucket or from `Berry`_ to get the temporary access keys with HTTP calls.
 
 .. _Connexion: https://pypi.python.org/pypi/connexion
-.. _Flask: http://flask.pocoo.org/
-.. _Swagger 2.0 Specification: https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md
-.. _/ui/: http://localhost:8080/ui/
 .. _STUPS: https://stups.io/
 .. _Mai: https://stups.io/mai/
 .. _Senza: https://stups.io/senza/
