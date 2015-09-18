@@ -2,17 +2,39 @@
 IAM-Role based rotatable AWS access key REST Service
 ====================================================
 
-Ro2Key (Role-based rotatable key) is a REST service to generate AWS ``Temporary Security Credentials`` by AWS STS ``AssumeRole`` API using the `Connexion`_ Python library.
+Ro2Key: Role-based rotatable key (role to key) is a REST service to generate AWS ``Temporary Security Credentials`` by AWS STS ``AssumeRole`` API using the `Connexion`_ Python library.
+
+``Ro2Key`` is designed to enable the access of AWS resources from ``robot users`` in a secure way under `STUPS`_ framework, it generates a ``Temporary Security Credentials`` by HTTPS call when the caller provides a valid OAuth2 token, and send send the credentials back as a JSON string.
 
 Connexion is a framework on top of Flask_ to automagically handle your REST API requests based on `Swagger 2.0 Specification`_ files in YAML.
 
 
-Running with Docker
+When should I use it
 ====================
+
+Normally you should not generate ``Temporary Security Credentials`` to external robot users, you should implement one or more STUPS-appliance as HTTPS-proxy to call AWS APIs (to execute the AWS operations).
+
+But for some use case, such as syncing bunch of data between two locations, a HTTPS-proxy between each other will be a huge bottleneck and brings a lot of problems, such as latency, incomplete data transfer or handling any other kind of error by transferring huge amount of data.
+
+Such as:
+
+- Use Case 1: sync a lot of huge files between external data center and AWS S3
+
+  - you can run Ro2Key on your AWS S3's account, with IAM role that has Get*/Put* permissions on target buckets
+
+* Use Case 2: sync buckets with a lot of huge files between different AWS accounts
+
+  - you can run Ro2Key on one of your AWS account, with IAM role that has Get*/Put* permissions on target buckets
+
+Then you can use AWS CLI or call AWS APIs to transfer data directly from the data source.
+
+
+Running with Docker
+===================
 
 Note that AWS STS ``AssumeRole`` API is only able to be called from an EC2 instance with delegated IAM role, that means to run a functional test you need to deploy this application on an AWS EC2 instance, by local test you can only check if the application is running successfully within the docker container, but you will not be able to get AWS ``Temporary Security Credentials`` by AWS STS ``AssumeRole`` API.
 
-You can build the Docker image from Dockerfile and run it:
+So we suggest you build the Docker image from Dockerfile and run it on an EC2 instance with delegated IAM role, named for example ``S3MintReadOnly``:
 
 .. code-block:: bash
 
@@ -27,7 +49,7 @@ You can build the Docker image from Dockerfile and run it:
 
 
 Deploying with Senza
-===================
+====================
 
 At first create an ``IAM role`` with delegate permissions, in following example we will create an IAM role with ReadOnly permission on S3 Mint Bucket.
 
@@ -71,5 +93,6 @@ The file ``how_to_use.sh`` gives you an example how to use the credentials from 
 .. _Flask: http://flask.pocoo.org/
 .. _Swagger 2.0 Specification: https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md
 .. _/ui/: http://localhost:8080/ui/
+.. _STUPS: https://stups.io/
 .. _Senza: https://stups.io/senza/
 .. _Berry: https://stups.io/berry/
