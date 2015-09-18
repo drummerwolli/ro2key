@@ -18,13 +18,13 @@ But for some use case, such as syncing bunch of data between two locations, a HT
 
 Such as:
 
-- Use Case 1: sync a lot of huge files between external data center and AWS S3 periodically by robot user (not manully by human user with `Mai`_)
+- Use Case 1: sync a lot of huge files between external data center and AWS S3 periodically by robot user (as for example cron job, not manully by human user with `Mai`_)
 
-  - you can run Ro2Key on your AWS S3's account, with IAM role that has Get*/Put* permissions on target buckets
+  - you can run ``Ro2Key`` on your AWS S3's account, with IAM role that has Get*/Put* permissions on target buckets
 
-* Use Case 2: sync buckets with a lot of huge files between different AWS accounts periodically by robot user (not manully by human user with `Mai`_)
+* Use Case 2: sync buckets with a lot of huge files between different AWS accounts periodically by robot user (as for example cron job, not manully by human user with `Mai`_)
 
-  - you can run Ro2Key on one of your AWS account, with IAM role that has Get*/Put* permissions on target buckets
+  - you can run ``Ro2Key`` on one of your AWS account, with IAM role that has Get*/Put* permissions on target buckets
 
 Then you can run a script as cron job or with any other job scheduling tools, and use AWS CLI or call AWS APIs to transfer data directly from the data source.
 
