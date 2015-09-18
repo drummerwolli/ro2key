@@ -18,15 +18,15 @@ But for some use case, such as syncing bunch of data between two locations, a HT
 
 Such as:
 
-- Use Case 1: sync a lot of huge files between external data center and AWS S3
+- Use Case 1: sync a lot of huge files between external data center and AWS S3 periodically by robot user (not manully by human user with `Mai`_)
 
   - you can run Ro2Key on your AWS S3's account, with IAM role that has Get*/Put* permissions on target buckets
 
-* Use Case 2: sync buckets with a lot of huge files between different AWS accounts
+* Use Case 2: sync buckets with a lot of huge files between different AWS accounts periodically by robot user (not manully by human user with `Mai`_)
 
   - you can run Ro2Key on one of your AWS account, with IAM role that has Get*/Put* permissions on target buckets
 
-Then you can use AWS CLI or call AWS APIs to transfer data directly from the data source.
+Then you can run a script as cron job or with any other job scheduling tools, and use AWS CLI or call AWS APIs to transfer data directly from the data source.
 
 
 Running with Docker
@@ -94,5 +94,6 @@ The file ``how_to_use.sh`` gives you an example how to use the credentials from 
 .. _Swagger 2.0 Specification: https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md
 .. _/ui/: http://localhost:8080/ui/
 .. _STUPS: https://stups.io/
+.. _Mai: https://stups.io/mai/
 .. _Senza: https://stups.io/senza/
 .. _Berry: https://stups.io/berry/
