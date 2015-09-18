@@ -4,7 +4,7 @@ IAM-Role based rotatable AWS access key REST Service
 
 Ro2Key: Role-based rotatable key (role to key) is a REST service to generate AWS ``Temporary Security Credentials`` by AWS STS ``AssumeRole`` API using the `Connexion`_ Python library.
 
-``Ro2Key`` is designed to enable the access of AWS resources from ``robot users`` in a secure way under `STUPS`_ framework, it generates a ``Temporary Security Credentials`` by HTTPS call when the caller provides a valid OAuth2 token, and send send the credentials back as a JSON string.
+``Ro2Key`` is designed to enable the access of AWS resources from ``robot users`` in a secure way under `STUPS`_ framework, it generates a ``Temporary Security Credentials`` by HTTPS call when the caller provides a valid OAuth2 token, and send the credentials back as a JSON string.
 
 
 When should I use it
