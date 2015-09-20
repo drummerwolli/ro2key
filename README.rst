@@ -14,7 +14,7 @@ Normally you should not generate ``Temporary Security Credentials`` to external 
 
 But for some use case, such as syncing bunch of data between two locations, a HTTPS-proxy between each other will be a huge bottleneck and brings a lot of problems, such as latency, incomplete data transfer or handling any other kind of error by transferring huge amount of data.
 
-Such as:
+Typical use case example:
 
 - Use Case 1: need to sync a lot of huge files between external data center and AWS S3 periodically by robot user (for example as cron job, not manully by human user with `Mai`_)
 
@@ -24,15 +24,13 @@ Such as:
 
   - you can run ``Ro2Key`` on one of your AWS account, with IAM role that has Get*/Put* permissions on target buckets
 
-Then you can run a script as cron job or with any other job scheduling tools, and use AWS CLI or call AWS APIs to transfer data directly from the data source.
+Then you can run a script as cron job or with any other job scheduling tools, call the ``Ro2Key`` API with a valid OAuth2 token to get AWS access keys, and then you can use AWS CLI or call AWS APIs to transfer data directly from the data source.
 
 
 Running with Docker
 ===================
 
-Note that AWS STS ``AssumeRole`` API is only able to be called from an EC2 instance with delegated IAM role, that means to run a functional test you need to deploy this application on an AWS EC2 instance, by local test you can only check if the application is running successfully within the docker container, but you will not be able to get AWS ``Temporary Security Credentials`` by AWS STS ``AssumeRole`` API.
-
-So we suggest you build the Docker image from Dockerfile and run it on an EC2 instance with delegated IAM role, named for example ``S3MintReadOnly``:
+Since this tool is designed to access AWS resources as robot user, so at first you should able to access AWS as a human user, to do a functional test, we suggest you to deploy this application on an AWS EC2 instance with delegated IAM role, you can use following commands on this EC2 instance:
 
 .. code-block:: bash
 
@@ -85,7 +83,7 @@ Now you can get a ``Temporary Security Credentials`` for the IAM role ``S3MintRe
 
     $ curl --insecure --request GET --header "Authorization: Bearer YOUR_OAUTH2_TOKEN" https://ro2key.teamid.example.org/get_key/S3MintReadOnly
 
-The file ``how_to_use.sh`` gives you an example how to use the credentials from S3 Mint Bucket or from `Berry`_ to get the temporary access keys with HTTP calls.
+The file ``how_to_use.sh`` gives you an example for getting OAuth2 token using the credentials from S3 Mint Bucket or from `Berry`_, and then shows how to get the temporary access keys via HTTP calls using this OAuth2 token.
 
 .. _Connexion: https://pypi.python.org/pypi/connexion
 .. _STUPS: https://stups.io/
