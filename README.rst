@@ -30,7 +30,9 @@ Then you can run a script as cron job or with any other job scheduling tools, ca
 Running with Docker
 ===================
 
-Since this tool is designed to access AWS resources as robot user, so at first you should able to access AWS as a human user, to do a functional test, we suggest you to deploy this application on an AWS EC2 instance with delegated IAM role, you can use following commands on this EC2 instance:
+Since this tool is designed to give access AWS resources to ``robot user``, so at first you should able to access AWS as a human user. That means you should be able to deploy application on AWS EC2 instances.
+
+To do a functional test, we suggest you to deploy this application on an EC2 instance with delegated IAM role, you can use following commands on this EC2 instance:
 
 .. code-block:: bash
 
