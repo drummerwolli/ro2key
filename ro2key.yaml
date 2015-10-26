@@ -17,6 +17,9 @@ SenzaInfo:
         Description: "OAuth2 service URL"
     - TokenInfoURL:
         Description: "TokenInfo service URL"
+    - Oauth2Scope:
+        Description: "OAuth2 scope to access the service"
+        Default: "uid"
     - HostedZone:
         Description: "Hosted Zone in which Stups deploys"
     - SSLCertificateId:
@@ -52,6 +55,7 @@ SenzaComponents:
           ARN_PREFIX: "{{Arguments.RolesArnPrefix}}"
           AUTH_URL: "{{Arguments.AuthURL}}"
           TOKENINFO_URL: "{{Arguments.TokenInfoURL}}"
+          OAUTH2_SCOPE: "{{Arguments.Oauth2Scope}}"
 
 Resources:
   Ro2KeySecGroup:
@@ -71,19 +75,6 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: "0.0.0.0/0"
-  Route53WeightedDomainRecord:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneName: "{{Arguments.HostedZone}}"
-      Name: "{{SenzaInfo.StackName}}.{{Arguments.HostedZone}}"
-      SetIdentifier: "{{SenzaInfo.StackName}}-{{Arguments.version}}"
-      Type: CNAME
-      TTL: 20
-      Weight: 0
-      ResourceRecords:
-        - Fn::GetAtt:
-           - AppLoadBalancer
-           - DNSName
   Route53VesionedDomainRecord:
     Type: AWS::Route53::RecordSet
     Properties:

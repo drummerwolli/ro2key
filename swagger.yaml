@@ -11,7 +11,7 @@ paths:
     get:
       summary: Get key by IAM Role
       security:
-        - oauth2: [uid]
+        - oauth2: ["{{oauth2_scope}}"]
       operationId: app.get_key
       parameters:
         - role_name:
@@ -35,4 +35,4 @@ securityDefinitions:
     authorizationUrl: "{{ auth_url if auth_url }}"
     x-tokenInfoUrl: "{{ tokeninfo_url if tokeninfo_url }}"
     scopes:
-      uid: Unique identifier of the user accessing the service.
+      "{{oauth2_scope}}": OAuth2 scope to access the service
