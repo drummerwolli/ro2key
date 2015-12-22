@@ -9,7 +9,7 @@ APP_URL=http://localhost:8080
 OAUTH2_URL=https://auth.example.org/oauth2
 
 ### IF BERRY IS RUNNING: do not need to download json here
-MINT_PATH=s3://mint_bucket/ro2key
+MINT_BUCKET=s3://mint_bucket/ro2key
 aws s3 cp $MINT_BUCKET/client.json .
 aws s3 cp $MINT_BUCKET/user.json .
 ### IF BERRY IS RUNNING: you should change to berry folder
